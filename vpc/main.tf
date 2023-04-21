@@ -19,6 +19,7 @@ resource "aws_subnet" "private_subnet" {
   count = "${length(var.pri_sub_cidr)}"
   vpc_id = "${aws_vpc.vpc.id}"
   cidr_block = "${element(var.pri_sub_cidr,count.index)}"
+  map_public_ip_on_launch = false
   tags = {
     name = "${var.pri_sub_name}-${count.index+1}"
   }

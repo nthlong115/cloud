@@ -9,4 +9,9 @@ resource "aws_instance" "ec2" {
 /*resource "tls_private_key" "name" {
   algorithm = "RSA"
   rsa_bits = 4096
+}
+
+resource "aws_placement_group" "lab" {
+  name     = "hunky-dory-pg"
+  strategy = "cluster"
 }*/

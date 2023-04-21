@@ -1,5 +1,5 @@
 variable "ami" {
-  default = "ami-04581fbf744a7d11f"
+  default = "ami-069aabeee6f53e7bf"
 }
 
 variable "ec2_type" {
@@ -17,4 +17,14 @@ variable "aws_sg_id" {
 
 variable "pub_ip" {
   type = bool
+}
+
+variable "place_name" {
+  type = string
+  default = "hunky-dory-pg"
+}
+
+variable "place_strategy" {
+  type = string
+  default = "cluster"
 }
