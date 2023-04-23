@@ -1,7 +1,7 @@
 resource "aws_vpc" "vpc" {
   cidr_block = "10.0.0.0/16"
   tags = {
-    name = var.vpc_name
+    Name = var.vpc_name
   }
 }
 
@@ -11,7 +11,7 @@ resource "aws_subnet" "public_subnet" {
   cidr_block = "${element(var.pub_sub_cidr,count.index)}"
   map_public_ip_on_launch = true
   tags = {
-    name = "${var.pub_sub_name}-${count.index+1}"
+    Name = "${var.vpc_name}-Public-subnet-${count.index+1}"
   }
 }
 
@@ -21,19 +21,22 @@ resource "aws_subnet" "private_subnet" {
   cidr_block = "${element(var.pri_sub_cidr,count.index)}"
   map_public_ip_on_launch = false
   tags = {
-    name = "${var.pri_sub_name}-${count.index+1}"
+    Name = "${var.vpc_name}-Private-subnet-${count.index+1}"
   }
 }
 
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.vpc.id
   tags = {
-    name = var.igw_name
+    Name = "${var.vpc_name}-Internet-gateway"
   }
 }
 
 resource "aws_route_table" "route_table" {
   vpc_id = aws_vpc.vpc.id
+  tags = {
+    Name = "${var.vpc_name}-Rote-table"
+  }
 }
 
 resource "aws_route_table_association" "subnet_associate" {
@@ -44,14 +47,23 @@ resource "aws_route_table_association" "subnet_associate" {
 resource "aws_nat_gateway" "ngw" {
   allocation_id = aws_eip.elasticIP.id
   subnet_id = aws_subnet.public_subnet.0.id 
+  tags = {
+    Name = "${var.vpc_name}-Nat-gateway"
+  }
 }
 
 resource "aws_eip" "elasticIP" {
   vpc = true 
+  tags = {
+    Name = "${var.vpc_name}-ElasticIp"
+  }
 }
 
 resource "aws_route_table" "route_table_nat" {
   vpc_id = aws_vpc.vpc.id
+  tags = {
+    Name = "${var.vpc_name}-Route-Nat"
+  }
 }
 
 resource "aws_route_table_association" "subnet_associate_nat" {

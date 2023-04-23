@@ -1,6 +1,9 @@
 resource "aws_security_group" "sg" {
   name = var.sg_name
   vpc_id = var.aws_vpc_id
+  tags = {
+    Name = "Security-group"
+  }
   ingress  {
     protocol    = "tcp"
     cidr_blocks = [ "0.0.0.0/0" ]

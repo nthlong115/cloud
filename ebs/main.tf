@@ -1,5 +1,10 @@
 resource "aws_ebs_volume" "aws_ebs" {
-  size = 100
+  size = 30
+  availability_zone = "us-east-1a"
+  type = "gp2"
+  tags = {
+    Name = "MyEBS"
+  }
 }
 
 resource "aws_volume_attachment" "to_pub_ec2" {

@@ -1,7 +1,7 @@
 resource "aws_eks_cluster" "cluster" {
-  name     = var.my_eks.name
-  role_arn = var.my_eks.role_arn
-  version  = var.my_eks.version
+  name     = var.me_name
+  role_arn = aws_iam_role.policy.arn
+  version  = var.me_version
   enabled_cluster_log_types = [ "api","audit","authenticator","controllerManager","scheduler" ]
 
   vpc_config {
@@ -12,6 +12,9 @@ resource "aws_eks_cluster" "cluster" {
     aws_iam_policy_attachment.AmazonEKSClusterPolicy,
     aws_iam_policy_attachment.AmazonEKSVPCResourceController
   ]
+  tags = {
+    Name = "${var.me_name}"
+  }
 }
 
 resource "aws_iam_role" "policy" {
@@ -31,14 +34,19 @@ resource "aws_iam_role" "policy" {
     ]
   }
   POLICY
+  tags = {
+    Name = "Eks-Policy"
+  }
 }
 
 resource "aws_iam_policy_attachment" "AmazonEKSClusterPolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  roles = aws_iam_role.policy.name
+  roles = [aws_iam_role.policy.name]
+  name = "at1"
 }
 
 resource "aws_iam_policy_attachment" "AmazonEKSVPCResourceController" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
-  roles = aws_iam_role.policy.name
+  roles = [aws_iam_role.policy.name]
+  name = "at2"
 }
